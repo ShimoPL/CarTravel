@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="cartraveldbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="cars">
+    <Key>
+      <PropertyRef Name="carId" />
+    </Key>
+    <Property Name="carId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brand" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="model" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="engine" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="prodYear" Type="Int16" Nullable="false" />
+    <Property Name="passengersCount" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="cars_status" Relationship="Self.carId" FromRole="cars" ToRole="cars_status" />
+  </EntityType>
+  <EntityType Name="cars_status">
+    <Key>
+      <PropertyRef Name="carStatusId" />
+    </Key>
+    <Property Name="carStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="carId" Type="Int32" Nullable="false" />
+    <Property Name="code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fromDate" Type="DateTime" />
+    <Property Name="toDate" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="isAvailble" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="cars" Relationship="Self.carId" FromRole="cars_status" ToRole="cars" />
+  </EntityType>
+  <EntityType Name="cars_status_list">
+    <Key>
+      <PropertyRef Name="statusId" />
+    </Key>
+    <Property Name="statusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="displayAs" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="payments">
+    <Key>
+      <PropertyRef Name="paymentId" />
+    </Key>
+    <Property Name="paymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="clientId" Type="Int32" Nullable="false" />
+    <Property Name="reservationId" Type="Int64" Nullable="false" />
+    <Property Name="offerPrice" Type="Decimal" Nullable="false" />
+    <Property Name="prepaid" Type="Decimal" />
+    <Property Name="lastPrice" Type="Decimal" Nullable="false" />
+    <Property Name="paymentDate" Type="DateTime" Nullable="false" />
+    <Property Name="paidOn" Type="DateTime" />
+    <Property Name="prepaidedOn" Type="DateTime" />
+    <NavigationProperty Name="users" Relationship="Self.clientId" FromRole="payments" ToRole="users" />
+    <NavigationProperty Name="reservations" Relationship="Self.reservationIn" FromRole="payments" ToRole="reservations" />
+  </EntityType>
+  <EntityType Name="reservations">
+    <Key>
+      <PropertyRef Name="reservationId" />
+    </Key>
+    <Property Name="reservationId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="client" Type="Int32" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Nullable="false" />
+    <Property Name="startDate" Type="DateTime" Nullable="false" />
+    <Property Name="endDate" Type="DateTime" Nullable="false" />
+    <Property Name="modifiedOn" Type="DateTime" />
+    <Property Name="modifiedBy" Type="Int32" />
+    <NavigationProperty Name="payments" Relationship="Self.reservationIn" FromRole="reservations" ToRole="payments" />
+    <NavigationProperty Name="users" Relationship="Self.client" FromRole="reservations" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.modifiedBy" FromRole="reservations" ToRole="users" />
+  </EntityType>
+  <EntityType Name="reservations_cars">
+    <Key>
+      <PropertyRef Name="reservationCarId" />
+    </Key>
+    <Property Name="reservationCarId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="reservationId" Type="Int64" Nullable="false" />
+    <Property Name="carId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="reservations_status">
+    <Key>
+      <PropertyRef Name="statusId" />
+    </Key>
+    <Property Name="statusId" Type="Int32" Nullable="false" />
+    <Property Name="code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="displayAs" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="systemusers">
+    <Key>
+      <PropertyRef Name="loginId" />
+    </Key>
+    <Property Name="loginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="login" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="users" Relationship="Self.userId" FromRole="systemusers" ToRole="users" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="firstName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="lastName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="createdOn" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="adress" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="role" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="payments" Relationship="Self.clientId" FromRole="users" ToRole="payments" />
+    <NavigationProperty Name="reservations" Relationship="Self.client" FromRole="users" ToRole="reservations" />
+    <NavigationProperty Name="reservations1" Relationship="Self.modifiedBy" FromRole="users" ToRole="reservations" />
+    <NavigationProperty Name="systemusers" Relationship="Self.userId" FromRole="users" ToRole="systemusers" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="carId">
+    <End Role="cars" Type="Self.cars" Multiplicity="1" />
+    <End Role="cars_status" Type="Self.cars_status" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cars">
+        <PropertyRef Name="carId" />
+      </Principal>
+      <Dependent Role="cars_status">
+        <PropertyRef Name="carId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="clientId">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="payments" Type="Self.payments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="payments">
+        <PropertyRef Name="clientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="reservationIn">
+    <End Role="reservations" Type="Self.reservations" Multiplicity="1" />
+    <End Role="payments" Type="Self.payments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="reservations">
+        <PropertyRef Name="reservationId" />
+      </Principal>
+      <Dependent Role="payments">
+        <PropertyRef Name="reservationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="client">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="reservations">
+        <PropertyRef Name="client" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="modifiedBy">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="reservations">
+        <PropertyRef Name="modifiedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="userId">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="systemusers" Type="Self.systemusers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="systemusers">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarTravelDb" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="cars" EntityType="Self.cars" />
+    <EntitySet Name="cars_status" EntityType="Self.cars_status" />
+    <EntitySet Name="cars_status_list" EntityType="Self.cars_status_list" />
+    <EntitySet Name="payments" EntityType="Self.payments" />
+    <EntitySet Name="reservations" EntityType="Self.reservations" />
+    <EntitySet Name="reservations_cars" EntityType="Self.reservations_cars" />
+    <EntitySet Name="reservations_status" EntityType="Self.reservations_status" />
+    <EntitySet Name="systemusers" EntityType="Self.systemusers" />
+    <EntitySet Name="users" EntityType="Self.users" />
+    <AssociationSet Name="carId" Association="Self.carId">
+      <End Role="cars" EntitySet="cars" />
+      <End Role="cars_status" EntitySet="cars_status" />
+    </AssociationSet>
+    <AssociationSet Name="clientId" Association="Self.clientId">
+      <End Role="users" EntitySet="users" />
+      <End Role="payments" EntitySet="payments" />
+    </AssociationSet>
+    <AssociationSet Name="reservationIn" Association="Self.reservationIn">
+      <End Role="reservations" EntitySet="reservations" />
+      <End Role="payments" EntitySet="payments" />
+    </AssociationSet>
+    <AssociationSet Name="client" Association="Self.client">
+      <End Role="users" EntitySet="users" />
+      <End Role="reservations" EntitySet="reservations" />
+    </AssociationSet>
+    <AssociationSet Name="modifiedBy" Association="Self.modifiedBy">
+      <End Role="users" EntitySet="users" />
+      <End Role="reservations" EntitySet="reservations" />
+    </AssociationSet>
+    <AssociationSet Name="userId" Association="Self.userId">
+      <End Role="users" EntitySet="users" />
+      <End Role="systemusers" EntitySet="systemusers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

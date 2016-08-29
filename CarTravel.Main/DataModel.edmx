@@ -1,0 +1,564 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="cartraveldbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cars">
+          <Key>
+            <PropertyRef Name="carId" />
+          </Key>
+          <Property Name="carId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="brand" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="model" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="engine" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="prodYear" Type="year" Nullable="false" />
+          <Property Name="passengersCount" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cars_status">
+          <Key>
+            <PropertyRef Name="carStatusId" />
+          </Key>
+          <Property Name="carStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="carId" Type="int" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="fromDate" Type="date" />
+          <Property Name="toDate" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="isAvailble" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cars_status_list">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="statusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="displayAs" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="payments">
+          <Key>
+            <PropertyRef Name="paymentId" />
+          </Key>
+          <Property Name="paymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="clientId" Type="int" Nullable="false" />
+          <Property Name="reservationId" Type="uint" Nullable="false" />
+          <Property Name="offerPrice" Type="decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="prepaid" Type="decimal" Precision="10" Scale="0" />
+          <Property Name="lastPrice" Type="decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="paymentDate" Type="date" Nullable="false" />
+          <Property Name="paidOn" Type="date" />
+          <Property Name="prepaidedOn" Type="date" />
+        </EntityType>
+        <EntityType Name="reservations">
+          <Key>
+            <PropertyRef Name="reservationId" />
+          </Key>
+          <Property Name="reservationId" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="client" Type="int" Nullable="false" />
+          <Property Name="createDate" Type="date" Nullable="false" />
+          <Property Name="startDate" Type="date" Nullable="false" />
+          <Property Name="endDate" Type="date" Nullable="false" />
+          <Property Name="modifiedOn" Type="date" />
+          <Property Name="modifiedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="reservations_cars">
+          <Key>
+            <PropertyRef Name="reservationCarId" />
+          </Key>
+          <Property Name="reservationCarId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="reservationId" Type="uint" Nullable="false" />
+          <Property Name="carId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reservations_status">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="statusId" Type="int" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="displayAs" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="systemusers">
+          <Key>
+            <PropertyRef Name="loginId" />
+          </Key>
+          <Property Name="loginId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="login" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="lastName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="createdOn" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="adress" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="role" Type="varchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <Association Name="carId">
+          <End Role="cars" Type="Self.cars" Multiplicity="1" />
+          <End Role="cars_status" Type="Self.cars_status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cars">
+              <PropertyRef Name="carId" />
+            </Principal>
+            <Dependent Role="cars_status">
+              <PropertyRef Name="carId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="client">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="reservations">
+              <PropertyRef Name="client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="clientId">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="clientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'code' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="code" />-->
+        <Association Name="modifiedBy">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="reservations">
+              <PropertyRef Name="modifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reservationIn">
+          <End Role="reservations" Type="Self.reservations" Multiplicity="1" />
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reservations">
+              <PropertyRef Name="reservationId" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="reservationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'statusId' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="statusId" />-->
+        <Association Name="userId">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="systemusers" Type="Self.systemusers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="systemusers">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cartraveldbModelStoreContainer">
+          <EntitySet Name="cars" EntityType="Self.cars" Schema="cartraveldb" store:Type="Tables" />
+          <EntitySet Name="cars_status" EntityType="Self.cars_status" Schema="cartraveldb" Table="cars.status" store:Type="Tables" />
+          <EntitySet Name="cars_status_list" EntityType="Self.cars_status_list" Schema="cartraveldb" Table="cars.status.list" store:Type="Tables" />
+          <EntitySet Name="payments" EntityType="Self.payments" Schema="cartraveldb" store:Type="Tables" />
+          <EntitySet Name="reservations" EntityType="Self.reservations" Schema="cartraveldb" store:Type="Tables" />
+          <EntitySet Name="reservations_cars" EntityType="Self.reservations_cars" Schema="cartraveldb" Table="reservations.cars" store:Type="Tables" />
+          <EntitySet Name="reservations_status" EntityType="Self.reservations_status" Schema="cartraveldb" Table="reservations.status" store:Type="Tables" />
+          <EntitySet Name="systemusers" EntityType="Self.systemusers" Schema="cartraveldb" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="cartraveldb" store:Type="Tables" />
+          <AssociationSet Name="carId" Association="Self.carId">
+            <End Role="cars" EntitySet="cars" />
+            <End Role="cars_status" EntitySet="cars_status" />
+          </AssociationSet>
+          <AssociationSet Name="client" Association="Self.client">
+            <End Role="users" EntitySet="users" />
+            <End Role="reservations" EntitySet="reservations" />
+          </AssociationSet>
+          <AssociationSet Name="clientId" Association="Self.clientId">
+            <End Role="users" EntitySet="users" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="modifiedBy" Association="Self.modifiedBy">
+            <End Role="users" EntitySet="users" />
+            <End Role="reservations" EntitySet="reservations" />
+          </AssociationSet>
+          <AssociationSet Name="reservationIn" Association="Self.reservationIn">
+            <End Role="reservations" EntitySet="reservations" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="userId" Association="Self.userId">
+            <End Role="users" EntitySet="users" />
+            <End Role="systemusers" EntitySet="systemusers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="cartraveldbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cars">
+          <Key>
+            <PropertyRef Name="carId" />
+          </Key>
+          <Property Name="carId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="brand" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="model" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="engine" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="prodYear" Type="Int16" Nullable="false" />
+          <Property Name="passengersCount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="cars_status" Relationship="Self.carId" FromRole="cars" ToRole="cars_status" />
+        </EntityType>
+        <EntityType Name="cars_status">
+          <Key>
+            <PropertyRef Name="carStatusId" />
+          </Key>
+          <Property Name="carStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="carId" Type="Int32" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fromDate" Type="DateTime" />
+          <Property Name="toDate" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="isAvailble" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="cars" Relationship="Self.carId" FromRole="cars_status" ToRole="cars" />
+        </EntityType>
+        <EntityType Name="cars_status_list">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="statusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="displayAs" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="payments">
+          <Key>
+            <PropertyRef Name="paymentId" />
+          </Key>
+          <Property Name="paymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clientId" Type="Int32" Nullable="false" />
+          <Property Name="reservationId" Type="Int64" Nullable="false" />
+          <Property Name="offerPrice" Type="Decimal" Nullable="false" />
+          <Property Name="prepaid" Type="Decimal" />
+          <Property Name="lastPrice" Type="Decimal" Nullable="false" />
+          <Property Name="paymentDate" Type="DateTime" Nullable="false" />
+          <Property Name="paidOn" Type="DateTime" />
+          <Property Name="prepaidedOn" Type="DateTime" />
+          <NavigationProperty Name="users" Relationship="Self.clientId" FromRole="payments" ToRole="users" />
+          <NavigationProperty Name="reservations" Relationship="Self.reservationIn" FromRole="payments" ToRole="reservations" />
+        </EntityType>
+        <EntityType Name="reservations">
+          <Key>
+            <PropertyRef Name="reservationId" />
+          </Key>
+          <Property Name="reservationId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="client" Type="Int32" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="startDate" Type="DateTime" Nullable="false" />
+          <Property Name="endDate" Type="DateTime" Nullable="false" />
+          <Property Name="modifiedOn" Type="DateTime" />
+          <Property Name="modifiedBy" Type="Int32" />
+          <NavigationProperty Name="payments" Relationship="Self.reservationIn" FromRole="reservations" ToRole="payments" />
+          <NavigationProperty Name="users" Relationship="Self.client" FromRole="reservations" ToRole="users" />
+          <NavigationProperty Name="users1" Relationship="Self.modifiedBy" FromRole="reservations" ToRole="users" />
+        </EntityType>
+        <EntityType Name="reservations_cars">
+          <Key>
+            <PropertyRef Name="reservationCarId" />
+          </Key>
+          <Property Name="reservationCarId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="reservationId" Type="Int64" Nullable="false" />
+          <Property Name="carId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reservations_status">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="statusId" Type="Int32" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="displayAs" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="systemusers">
+          <Key>
+            <PropertyRef Name="loginId" />
+          </Key>
+          <Property Name="loginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="users" Relationship="Self.userId" FromRole="systemusers" ToRole="users" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="createdOn" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="adress" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="payments" Relationship="Self.clientId" FromRole="users" ToRole="payments" />
+          <NavigationProperty Name="reservations" Relationship="Self.client" FromRole="users" ToRole="reservations" />
+          <NavigationProperty Name="reservations1" Relationship="Self.modifiedBy" FromRole="users" ToRole="reservations" />
+          <NavigationProperty Name="systemusers" Relationship="Self.userId" FromRole="users" ToRole="systemusers" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="carId">
+          <End Role="cars" Type="Self.cars" Multiplicity="1" />
+          <End Role="cars_status" Type="Self.cars_status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cars">
+              <PropertyRef Name="carId" />
+            </Principal>
+            <Dependent Role="cars_status">
+              <PropertyRef Name="carId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="clientId">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="clientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reservationIn">
+          <End Role="reservations" Type="Self.reservations" Multiplicity="1" />
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reservations">
+              <PropertyRef Name="reservationId" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="reservationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="client">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="reservations">
+              <PropertyRef Name="client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="modifiedBy">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="reservations">
+              <PropertyRef Name="modifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="userId">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="systemusers" Type="Self.systemusers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="systemusers">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarTravelDb" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cars" EntityType="Self.cars" />
+          <EntitySet Name="cars_status" EntityType="Self.cars_status" />
+          <EntitySet Name="cars_status_list" EntityType="Self.cars_status_list" />
+          <EntitySet Name="payments" EntityType="Self.payments" />
+          <EntitySet Name="reservations" EntityType="Self.reservations" />
+          <EntitySet Name="reservations_cars" EntityType="Self.reservations_cars" />
+          <EntitySet Name="reservations_status" EntityType="Self.reservations_status" />
+          <EntitySet Name="systemusers" EntityType="Self.systemusers" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <AssociationSet Name="carId" Association="Self.carId">
+            <End Role="cars" EntitySet="cars" />
+            <End Role="cars_status" EntitySet="cars_status" />
+          </AssociationSet>
+          <AssociationSet Name="clientId" Association="Self.clientId">
+            <End Role="users" EntitySet="users" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="reservationIn" Association="Self.reservationIn">
+            <End Role="reservations" EntitySet="reservations" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="client" Association="Self.client">
+            <End Role="users" EntitySet="users" />
+            <End Role="reservations" EntitySet="reservations" />
+          </AssociationSet>
+          <AssociationSet Name="modifiedBy" Association="Self.modifiedBy">
+            <End Role="users" EntitySet="users" />
+            <End Role="reservations" EntitySet="reservations" />
+          </AssociationSet>
+          <AssociationSet Name="userId" Association="Self.userId">
+            <End Role="users" EntitySet="users" />
+            <End Role="systemusers" EntitySet="systemusers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="cartraveldbModelStoreContainer" CdmEntityContainer="CarTravelDb">
+          <EntitySetMapping Name="cars">
+            <EntityTypeMapping TypeName="cartraveldbModel.cars">
+              <MappingFragment StoreEntitySet="cars">
+                <ScalarProperty Name="carId" ColumnName="carId" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="engine" ColumnName="engine" />
+                <ScalarProperty Name="prodYear" ColumnName="prodYear" />
+                <ScalarProperty Name="passengersCount" ColumnName="passengersCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cars_status">
+            <EntityTypeMapping TypeName="cartraveldbModel.cars_status">
+              <MappingFragment StoreEntitySet="cars_status">
+                <ScalarProperty Name="carStatusId" ColumnName="carStatusId" />
+                <ScalarProperty Name="carId" ColumnName="carId" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="fromDate" ColumnName="fromDate" />
+                <ScalarProperty Name="toDate" ColumnName="toDate" />
+                <ScalarProperty Name="isAvailble" ColumnName="isAvailble" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cars_status_list">
+            <EntityTypeMapping TypeName="cartraveldbModel.cars_status_list">
+              <MappingFragment StoreEntitySet="cars_status_list">
+                <ScalarProperty Name="statusId" ColumnName="statusId" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="displayAs" ColumnName="displayAs" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="payments">
+            <EntityTypeMapping TypeName="cartraveldbModel.payments">
+              <MappingFragment StoreEntitySet="payments">
+                <ScalarProperty Name="paymentId" ColumnName="paymentId" />
+                <ScalarProperty Name="clientId" ColumnName="clientId" />
+                <ScalarProperty Name="reservationId" ColumnName="reservationId" />
+                <ScalarProperty Name="offerPrice" ColumnName="offerPrice" />
+                <ScalarProperty Name="prepaid" ColumnName="prepaid" />
+                <ScalarProperty Name="lastPrice" ColumnName="lastPrice" />
+                <ScalarProperty Name="paymentDate" ColumnName="paymentDate" />
+                <ScalarProperty Name="paidOn" ColumnName="paidOn" />
+                <ScalarProperty Name="prepaidedOn" ColumnName="prepaidedOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reservations">
+            <EntityTypeMapping TypeName="cartraveldbModel.reservations">
+              <MappingFragment StoreEntitySet="reservations">
+                <ScalarProperty Name="reservationId" ColumnName="reservationId" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="client" ColumnName="client" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="modifiedOn" ColumnName="modifiedOn" />
+                <ScalarProperty Name="modifiedBy" ColumnName="modifiedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reservations_cars">
+            <EntityTypeMapping TypeName="cartraveldbModel.reservations_cars">
+              <MappingFragment StoreEntitySet="reservations_cars">
+                <ScalarProperty Name="reservationCarId" ColumnName="reservationCarId" />
+                <ScalarProperty Name="reservationId" ColumnName="reservationId" />
+                <ScalarProperty Name="carId" ColumnName="carId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reservations_status">
+            <EntityTypeMapping TypeName="cartraveldbModel.reservations_status">
+              <MappingFragment StoreEntitySet="reservations_status">
+                <ScalarProperty Name="statusId" ColumnName="statusId" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="displayAs" ColumnName="displayAs" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="systemusers">
+            <EntityTypeMapping TypeName="cartraveldbModel.systemusers">
+              <MappingFragment StoreEntitySet="systemusers">
+                <ScalarProperty Name="loginId" ColumnName="loginId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="cartraveldbModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="createdOn" ColumnName="createdOn" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
