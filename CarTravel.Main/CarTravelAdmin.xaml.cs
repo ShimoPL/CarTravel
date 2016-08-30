@@ -34,7 +34,7 @@ namespace CarTravel.Main
         private void MainLogic()
         {
             //UpdateReservationsList();
-            lstReservations.ItemsSource = _dataAccess.getReservationsList(DateTime.Today, DateTime.Today);
+            lstReservations.ItemsSource = _dataAccess.getReservationsList(DateTime.Today.AddDays(-7), DateTime.Today);
         }
 
         private void UpdateReservationsList()

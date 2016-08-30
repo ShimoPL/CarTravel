@@ -34,7 +34,7 @@ namespace CarTravel.Main.Classes.DataAccess
                         endDate = r.endDate,
                         statusCode = r.status,
                         client = db.users.Where(u => u.userId == r.client).Select(u => u.firstName + " " + u.lastName).FirstOrDefault(),
-                        carsList = db.reservations_cars.Select(c => c).Where(c => c.reservationId == r.reservationId).ToArray()
+                        //carsList = db.reservations_cars.Select(c => c).Where(c => c.reservationId == r.reservationId).ToArray()
                     }
                 ).ToList().Select(o => new ResrvationModel
                 {
