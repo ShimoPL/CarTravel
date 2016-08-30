@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace CarTravel.Main.Classes.DataAccess
 {
@@ -26,19 +27,28 @@ namespace CarTravel.Main.Classes.DataAccess
             using (var db = new CarTravelDb())
             {
                 var reservation = db.reservations.Where(r => r.createDate >= fromDate && r.createDate <= toDate)
-                    .Select(r => new ResrvationModel
+                    .Select(r => new
                     {
                         reservationId = r.reservationId,
                         startDate = r.startDate,
                         endDate = r.endDate,
                         statusCode = r.status,
-                        status = db.reservations_status.Where(s => s.code == r.status).Select(s => s.displayAs).FirstOrDefault(),
                         client = db.users.Where(u => u.userId == r.client).Select(u => u.firstName + " " + u.lastName).FirstOrDefault(),
-                        carsList = db.reservations_cars.Where(c => c.reservationId == r.reservationId).Select(c => c.carId).ToList()
+                        carsList = db.reservations_cars.Select(c => c).Where(c => c.reservationId == r.reservationId).ToArray()
                     }
-                ).ToList();
+                ).ToList().Select(o => new ResrvationModel
+                {
+                    reservationId = o.reservationId,
+                    startDate = o.startDate,
+                    endDate = o.endDate,
+                    statusCode = o.statusCode,
+                    status = statusList.Where(s => s.Code == o.statusCode).Select(s => s.DisplayAs).FirstOrDefault(),
+                    client = o.client,
+                    //carsList = o.carsList.ToList()
+                }).ToList();
+
                 return reservation;
-            }
+            } 
         }
     }
 }
