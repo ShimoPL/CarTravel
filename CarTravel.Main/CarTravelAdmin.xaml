@@ -11,7 +11,24 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
-
+        <ListView Name="lstReservations" Grid.Row="0" Grid.Column="0">
+            <ListView.View>
+                <GridView AllowsColumnReorder="True">
+                    <GridView.Columns>
+                        <GridViewColumn Header="From"
+                            DisplayMemberBinding="{Binding startDate, StringFormat=d}" />
+                        <GridViewColumn Header="To"
+                            DisplayMemberBinding="{Binding endDate, StringFormat=d}" />
+                        <GridViewColumn Header="Status"
+                            DisplayMemberBinding="{Binding status}" />
+                        <GridViewColumn Header="Client"
+                            DisplayMemberBinding="{Binding client}" />
+                        <GridViewColumn Header="Cars count"
+                            DisplayMemberBinding="{Binding carsList.Count()}" />
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
         
     </Grid>
 </Window>

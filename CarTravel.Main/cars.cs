@@ -26,6 +26,7 @@ namespace CarTravel.Main
         public string engine { get; set; }
         public short prodYear { get; set; }
         public int passengersCount { get; set; }
+        public string displayAs { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cars_status> cars_status { get; set; }

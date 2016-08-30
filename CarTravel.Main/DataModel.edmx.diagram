@@ -10,7 +10,7 @@
         <EntityTypeShape EntityType="cartraveldbModel.cars_status_list" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="cartraveldbModel.payments" Width="1.5" PointX="6.875" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="cartraveldbModel.reservations" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="cartraveldbModel.reservations_cars" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="cartraveldbModel.reservations_cars" Width="1.5" PointX="8" PointY="1.625" IsExpanded="true" />
         <EntityTypeShape EntityType="cartraveldbModel.reservations_status" Width="1.5" PointX="3.25" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="cartraveldbModel.systemusers" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
         <EntityTypeShape EntityType="cartraveldbModel.users" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />

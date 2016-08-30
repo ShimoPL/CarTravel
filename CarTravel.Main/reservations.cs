@@ -26,6 +26,7 @@ namespace CarTravel.Main
         public System.DateTime createDate { get; set; }
         public System.DateTime startDate { get; set; }
         public System.DateTime endDate { get; set; }
+        public string comment { get; set; }
         public Nullable<System.DateTime> modifiedOn { get; set; }
         public Nullable<int> modifiedBy { get; set; }
     

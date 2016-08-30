@@ -1,4 +1,5 @@
 ﻿using CarTravel.Main.Authorisation;
+using CarTravel.Main.Classes.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +23,23 @@ namespace CarTravel.Main
     public partial class MainWindow : Window
     {
         private users _actualUser;
+        private DataAccess _dataAccess = new DataAccess();
         public MainWindow()
         {
             InitializeComponent();
             _actualUser = new UserLogOn().ActualUser;
             if (_actualUser == null || _actualUser.role != "E") Application.Current.Shutdown();
+            else MainLogic();
         }
-        private void MainLogic() { }
+        private void MainLogic()
+        {
+            //UpdateReservationsList();
+            lstReservations.ItemsSource = _dataAccess.getReservationsList(DateTime.Today, DateTime.Today);
+        }
+
+        private void UpdateReservationsList()
+        {
+            var query = _dataAccess.getReservationsList(DateTime.Today, DateTime.Today);           
+        }
     }
 }
