@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="cartraveldbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="shimo_CarTravelDbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="cars">
           <Key>
             <PropertyRef Name="carId" />
@@ -15,6 +15,7 @@
           <Property Name="engine" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="prodYear" Type="year" Nullable="false" />
           <Property Name="passengersCount" Type="int" Nullable="false" />
+          <Property Name="displayAs" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="cars_status">
           <Key>
@@ -59,6 +60,7 @@
           <Property Name="createDate" Type="date" Nullable="false" />
           <Property Name="startDate" Type="date" Nullable="false" />
           <Property Name="endDate" Type="date" Nullable="false" />
+          <Property Name="comment" Type="varchar" MaxLength="2048" />
           <Property Name="modifiedOn" Type="date" />
           <Property Name="modifiedBy" Type="int" />
         </EntityType>
@@ -177,16 +179,16 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="cartraveldbModelStoreContainer">
-          <EntitySet Name="cars" EntityType="Self.cars" Schema="cartraveldb" store:Type="Tables" />
-          <EntitySet Name="cars_status" EntityType="Self.cars_status" Schema="cartraveldb" Table="cars.status" store:Type="Tables" />
-          <EntitySet Name="cars_status_list" EntityType="Self.cars_status_list" Schema="cartraveldb" Table="cars.status.list" store:Type="Tables" />
-          <EntitySet Name="payments" EntityType="Self.payments" Schema="cartraveldb" store:Type="Tables" />
-          <EntitySet Name="reservations" EntityType="Self.reservations" Schema="cartraveldb" store:Type="Tables" />
-          <EntitySet Name="reservations_cars" EntityType="Self.reservations_cars" Schema="cartraveldb" Table="reservations.cars" store:Type="Tables" />
-          <EntitySet Name="reservations_status" EntityType="Self.reservations_status" Schema="cartraveldb" Table="reservations.status" store:Type="Tables" />
-          <EntitySet Name="systemusers" EntityType="Self.systemusers" Schema="cartraveldb" store:Type="Tables" />
-          <EntitySet Name="users" EntityType="Self.users" Schema="cartraveldb" store:Type="Tables" />
+        <EntityContainer Name="shimo_CarTravelDbModelStoreContainer">
+          <EntitySet Name="cars" EntityType="Self.cars" Schema="shimo_CarTravelDb" store:Type="Tables" />
+          <EntitySet Name="cars_status" EntityType="Self.cars_status" Schema="shimo_CarTravelDb" Table="cars.status" store:Type="Tables" />
+          <EntitySet Name="cars_status_list" EntityType="Self.cars_status_list" Schema="shimo_CarTravelDb" Table="cars.status.list" store:Type="Tables" />
+          <EntitySet Name="payments" EntityType="Self.payments" Schema="shimo_CarTravelDb" store:Type="Tables" />
+          <EntitySet Name="reservations" EntityType="Self.reservations" Schema="shimo_CarTravelDb" store:Type="Tables" />
+          <EntitySet Name="reservations_cars" EntityType="Self.reservations_cars" Schema="shimo_CarTravelDb" Table="reservations.cars" store:Type="Tables" />
+          <EntitySet Name="reservations_status" EntityType="Self.reservations_status" Schema="shimo_CarTravelDb" Table="reservations.status" store:Type="Tables" />
+          <EntitySet Name="systemusers" EntityType="Self.systemusers" Schema="shimo_CarTravelDb" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="shimo_CarTravelDb" store:Type="Tables" />
           <AssociationSet Name="carId" Association="Self.carId">
             <End Role="cars" EntitySet="cars" />
             <End Role="cars_status" EntitySet="cars_status" />
@@ -212,10 +214,11 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             <End Role="systemusers" EntitySet="systemusers" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="cartraveldbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="shimo_CarTravelDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="cars">
           <Key>
             <PropertyRef Name="carId" />
@@ -226,6 +229,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
           <Property Name="engine" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="prodYear" Type="Int16" Nullable="false" />
           <Property Name="passengersCount" Type="Int32" Nullable="false" />
+          <Property Name="displayAs" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="cars_status" Relationship="Self.carId" FromRole="cars" ToRole="cars_status" />
         </EntityType>
         <EntityType Name="cars_status">
@@ -274,6 +278,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
           <Property Name="createDate" Type="DateTime" Nullable="false" />
           <Property Name="startDate" Type="DateTime" Nullable="false" />
           <Property Name="endDate" Type="DateTime" Nullable="false" />
+          <Property Name="comment" Type="String" MaxLength="2048" FixedLength="false" Unicode="false" />
           <Property Name="modifiedOn" Type="DateTime" />
           <Property Name="modifiedBy" Type="Int32" />
           <NavigationProperty Name="payments" Relationship="Self.reservationIn" FromRole="reservations" ToRole="payments" />
@@ -313,6 +318,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
           <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="firstName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="lastName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="createdOn" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="adress" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="role" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
@@ -320,7 +326,6 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
           <NavigationProperty Name="reservations" Relationship="Self.client" FromRole="users" ToRole="reservations" />
           <NavigationProperty Name="reservations1" Relationship="Self.modifiedBy" FromRole="users" ToRole="reservations" />
           <NavigationProperty Name="systemusers" Relationship="Self.userId" FromRole="users" ToRole="systemusers" />
-          <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="carId">
           <End Role="cars" Type="Self.cars" Multiplicity="1" />
@@ -434,9 +439,9 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="cartraveldbModelStoreContainer" CdmEntityContainer="CarTravelDb">
+        <EntityContainerMapping StorageEntityContainer="shimo_CarTravelDbModelStoreContainer" CdmEntityContainer="CarTravelDb">
           <EntitySetMapping Name="cars">
-            <EntityTypeMapping TypeName="cartraveldbModel.cars">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.cars">
               <MappingFragment StoreEntitySet="cars">
                 <ScalarProperty Name="carId" ColumnName="carId" />
                 <ScalarProperty Name="brand" ColumnName="brand" />
@@ -444,11 +449,12 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
                 <ScalarProperty Name="engine" ColumnName="engine" />
                 <ScalarProperty Name="prodYear" ColumnName="prodYear" />
                 <ScalarProperty Name="passengersCount" ColumnName="passengersCount" />
+                <ScalarProperty Name="displayAs" ColumnName="displayAs" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="cars_status">
-            <EntityTypeMapping TypeName="cartraveldbModel.cars_status">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.cars_status">
               <MappingFragment StoreEntitySet="cars_status">
                 <ScalarProperty Name="carStatusId" ColumnName="carStatusId" />
                 <ScalarProperty Name="carId" ColumnName="carId" />
@@ -460,7 +466,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="cars_status_list">
-            <EntityTypeMapping TypeName="cartraveldbModel.cars_status_list">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.cars_status_list">
               <MappingFragment StoreEntitySet="cars_status_list">
                 <ScalarProperty Name="statusId" ColumnName="statusId" />
                 <ScalarProperty Name="code" ColumnName="code" />
@@ -469,7 +475,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="payments">
-            <EntityTypeMapping TypeName="cartraveldbModel.payments">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.payments">
               <MappingFragment StoreEntitySet="payments">
                 <ScalarProperty Name="paymentId" ColumnName="paymentId" />
                 <ScalarProperty Name="clientId" ColumnName="clientId" />
@@ -484,7 +490,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="reservations">
-            <EntityTypeMapping TypeName="cartraveldbModel.reservations">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.reservations">
               <MappingFragment StoreEntitySet="reservations">
                 <ScalarProperty Name="reservationId" ColumnName="reservationId" />
                 <ScalarProperty Name="status" ColumnName="status" />
@@ -492,13 +498,14 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="startDate" ColumnName="startDate" />
                 <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
                 <ScalarProperty Name="modifiedOn" ColumnName="modifiedOn" />
                 <ScalarProperty Name="modifiedBy" ColumnName="modifiedBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="reservations_cars">
-            <EntityTypeMapping TypeName="cartraveldbModel.reservations_cars">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.reservations_cars">
               <MappingFragment StoreEntitySet="reservations_cars">
                 <ScalarProperty Name="reservationCarId" ColumnName="reservationCarId" />
                 <ScalarProperty Name="reservationId" ColumnName="reservationId" />
@@ -507,7 +514,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="reservations_status">
-            <EntityTypeMapping TypeName="cartraveldbModel.reservations_status">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.reservations_status">
               <MappingFragment StoreEntitySet="reservations_status">
                 <ScalarProperty Name="statusId" ColumnName="statusId" />
                 <ScalarProperty Name="code" ColumnName="code" />
@@ -516,7 +523,7 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="systemusers">
-            <EntityTypeMapping TypeName="cartraveldbModel.systemusers">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.systemusers">
               <MappingFragment StoreEntitySet="systemusers">
                 <ScalarProperty Name="loginId" ColumnName="loginId" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
@@ -526,12 +533,12 @@ warning 6035: The relationship 'statusId' has columns that are not part of the k
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="users">
-            <EntityTypeMapping TypeName="cartraveldbModel.users">
+            <EntityTypeMapping TypeName="shimo_CarTravelDbModel.users">
               <MappingFragment StoreEntitySet="users">
-                <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="firstName" ColumnName="firstName" />
                 <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="createdOn" ColumnName="createdOn" />
                 <ScalarProperty Name="adress" ColumnName="adress" />
                 <ScalarProperty Name="role" ColumnName="role" />

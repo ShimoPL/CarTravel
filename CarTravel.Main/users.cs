@@ -26,10 +26,10 @@ namespace CarTravel.Main
         public int userId { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public string email { get; set; }
         public string createdOn { get; set; }
         public string adress { get; set; }
         public string role { get; set; }
-        public string email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<payments> payments { get; set; }
