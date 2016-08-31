@@ -94,6 +94,7 @@
     <Compile Include="Classes\Authorisation\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\GeneralModel\FilterSettingsModel.cs" />
     <Compile Include="DataModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -26,17 +26,21 @@ namespace CarTravel.Main.Classes.DataAccess
         {
             using (var db = new CarTravelDb())
             {
-                var reservation = db.reservations.Where(r => r.createDate >= fromDate && r.createDate <= toDate)
-                    .Select(r => new
-                    {
-                        reservationId = r.reservationId,
-                        startDate = r.startDate,
-                        endDate = r.endDate,
-                        statusCode = r.status,
-                        client = db.users.Where(u => u.userId == r.client).Select(u => u.firstName + " " + u.lastName).FirstOrDefault(),
-                        //carsList = db.reservations_cars.Select(c => c).Where(c => c.reservationId == r.reservationId).ToArray()
-                    }
-                ).ToList().Select(o => new ResrvationModel
+                var tmp = from r in db.reservations.ToList()
+                                  join rc in db.reservations_cars.ToList() on r.reservationId equals rc.reservationId
+                                  where r.createDate >= fromDate && r.createDate <= toDate
+                                  group new { r, rc } by r into rgroupped
+                                  select new
+                                  {
+                                      reservationId = rgroupped.Key.reservationId,
+                                      startDate = rgroupped.Key.startDate,
+                                      endDate = rgroupped.Key.endDate,
+                                      statusCode = rgroupped.Key.status,
+                                      client = db.users.Where(u => u.userId == rgroupped.Key.client).Select(u => u.firstName + " " + u.lastName).FirstOrDefault(),
+                                      carsList = rgroupped.Select(p => p.rc.carId)
+                                  };
+
+                var reservation = tmp.ToList().Select(o => new ResrvationModel
                 {
                     reservationId = o.reservationId,
                     startDate = o.startDate,
@@ -44,7 +48,7 @@ namespace CarTravel.Main.Classes.DataAccess
                     statusCode = o.statusCode,
                     status = statusList.Where(s => s.Code == o.statusCode).Select(s => s.DisplayAs).FirstOrDefault(),
                     client = o.client,
-                    //carsList = o.carsList.ToList()
+                    carsList = o.carsList.ToList()
                 }).ToList();
 
                 return reservation;

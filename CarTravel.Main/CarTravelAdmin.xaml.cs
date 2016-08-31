@@ -1,5 +1,6 @@
 ﻿using CarTravel.Main.Authorisation;
 using CarTravel.Main.Classes.DataAccess;
+using CarTravel.Main.Classes.GeneralModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +35,14 @@ namespace CarTravel.Main
         private void MainLogic()
         {
             //UpdateReservationsList();
-            lstReservations.ItemsSource = _dataAccess.getReservationsList(DateTime.Today.AddDays(-7), DateTime.Today);
+            FilterSettingsModel filters = new FilterSettingsModel();
+            filterSettings.DataContext = filters; 
+            reservationsList.ItemsSource = _dataAccess.getReservationsList(DateTime.Today.AddDays(-7), DateTime.Today);
         }
 
         private void UpdateReservationsList()
         {
-            var query = _dataAccess.getReservationsList(DateTime.Today, DateTime.Today);           
+            var query = _dataAccess.getReservationsList(DateTime.Today, DateTime.Today);
         }
     }
 }
