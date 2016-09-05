@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarTravel.Main.Classes.LoadingScreen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,8 +26,11 @@ namespace CarTravel.Main.Authorisation
 
                 if (loginWin.DialogResult == true)
                 {
+                    var loading = new LoadingWin();
+                    loading.Show();
                     login = loginWin.login;
                     userId = CheckUserCredentials(login, loginWin.pass);
+                    loading.Close();
                 }
 
                 if (userId != -1)

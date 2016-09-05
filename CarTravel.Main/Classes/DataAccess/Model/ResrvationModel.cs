@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace CarTravel.Main.Classes.DataAccess.Model
 {
-    public class ResrvationModel : reservations
+    public class ReservationModel : reservations
     {
-        public ResrvationModel()
+        public ReservationModel()
         {
             carsList = new List<int>();
         }
 
         public IList<int> carsList { get; set; }
         public string statusCode { get; set; }
-        public string client { get; set; }
-
-
+        public string clientName { get; set; }
     }
 }

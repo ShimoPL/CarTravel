@@ -1,47 +1,142 @@
 ﻿<Window x:Class="CarTravel.Main.MainWindow"
+        x:Name="mainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarTravel.Main"
+        xmlns:utils="clr-namespace:CarTravel.Main.Utils"
         mc:Ignorable="d"
-        Title="Car TRavel Admin" Height="350" Width="525">
+        Title="Car Travel Admin" Height="350" Width="725">
+
+    <Window.Resources>
+        <utils:BoolToVisibleConverter x:Key="boolToVis" />
+        <DataTemplate x:Key="ArrowUp">
+            <DockPanel>
+                <TextBlock HorizontalAlignment="Center"
+                           Text="{Binding}" />
+                <Path VerticalAlignment="Center"
+                      Fill="Black"
+                      Data="M 5,5 15,5 10,0 5,5" />
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ArrowDown">
+            <DockPanel>
+                <TextBlock HorizontalAlignment="Center"
+                           Text="{Binding}" />
+                <Path VerticalAlignment="Center"
+                      Fill="Black"
+                      Data="M 5,0 10,5 15,0 5,0" />
+            </DockPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="120"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="120" />
-        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="120"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="120" />
+            </Grid.ColumnDefinitions>
 
-        <WrapPanel x:Name="filterSettings" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
-            <DatePicker x:Name="dateFrom" SelectedDate="{Binding DateFrom}" BorderThickness="0" HorizontalAlignment="Left" Width="150" UseLayoutRounding="True" />
-            <DatePicker x:Name="dateTo" SelectedDate="{Binding DateTo}" BorderThickness="0" HorizontalAlignment="Left" Width="150" UseLayoutRounding="True" />
-            <!--<DatePicker x:Name="dateTo"/>-->
-        </WrapPanel>
-
-        <ListView Name="reservationsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-            <ListView.View>
-                <GridView AllowsColumnReorder="True">
-                    <GridView.Columns>
-                        <GridViewColumn Width="auto" Header="From"
+            <WrapPanel x:Name="filterSettings" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+                <StackPanel Margin="10,0,10,0">
+                    <Label Content="Start Date" Padding="3,0,2,0"></Label>
+                    <DatePicker x:Name="dateFrom" SelectedDate="{Binding DateFrom}" DisplayDateEnd="{Binding DateTo}" 
+                                BorderThickness="0" HorizontalAlignment="Left" Width="100" UseLayoutRounding="True"
+                                SelectedDateChanged="date_UpdateReservationsList">
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="End Date" Padding="3,0,2,0"></Label>
+                    <DatePicker x:Name="dateTo" SelectedDate="{Binding DateTo}" DisplayDateStart="{Binding DateFrom}" 
+                                BorderThickness="0" HorizontalAlignment="Left" Width="100" UseLayoutRounding="True"
+                                SelectedDateChanged="date_UpdateReservationsList">
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                </StackPanel>
+            </WrapPanel>
+            <ListView Name="reservationsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" GridViewColumnHeader.Click="reservationsList_Click" SelectionChanged="reservationsList_SelectionChanged" >
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True">
+                        <GridView.Columns>
+                            <GridViewColumn Width="80" Header="From"
                             DisplayMemberBinding="{Binding startDate, StringFormat=d}" />
-                        <GridViewColumn Width="auto" Header="To"
+                            <GridViewColumn Width="80" Header="To"
                             DisplayMemberBinding="{Binding endDate, StringFormat=d}" />
-                        <GridViewColumn Width="auto" Header="Status"
+                            <GridViewColumn Width="130" Header="Status"
                             DisplayMemberBinding="{Binding status}" />
-                        <GridViewColumn Width="auto" Header="Client"
-                            DisplayMemberBinding="{Binding client}" />
-                        <GridViewColumn Width="auto" Header="Cars count"
+                            <GridViewColumn Width="180" Header="Client"
+                            DisplayMemberBinding="{Binding clientName}" />
+                            <GridViewColumn Width="60" Header="Cars qty."
                             DisplayMemberBinding="{Binding carsList.Count}" />
-                    </GridView.Columns>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                            <GridViewColumn Width="80" Header="Added on"
+                            DisplayMemberBinding="{Binding createDate, StringFormat=d}" />
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Label x:Name="contentLabel" Content="No data to show. Check filters settings" 
+               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
+               HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
 
+            <WrapPanel Name="EditPanel" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="5">
+                <StackPanel Width="160" Margin="5 0">
+                    <Label Margin="0 5 0 0" Height="18" Padding="0">Start Date</Label>
+                    <DatePicker Name="fromDate" SelectedDate="{Binding startDate, StringFormat=d}" Height="22" Padding="3 1"></DatePicker>
+                    <Label Margin="0 5 0 0" Height="18" Padding="0">End date</Label>
+                    <DatePicker Name="toDate" SelectedDate="{Binding endDate, StringFormat=d}" Height="22" Padding="3 1"></DatePicker>
+                </StackPanel>
+                <StackPanel Width="160" Margin="5 0">
+                    <Label Margin="0 5 0 0" Height="18" Padding="0">Client</Label>
+                    <ComboBox Name="clientListBox"
+                              SelectedValue="{Binding client, Mode=TwoWay}" 
+                              SelectedValuePath="userId">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="firstName" />
+                                            <Binding Path="lastName" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Margin="0 5 0 0" Height="18" Padding="0">Reservation Status</Label>
+                    <ComboBox Name="statusListBox"
+                              SelectedValue="{Binding statusCode, Mode=TwoWay}" 
+                              SelectedValuePath="Code"
+                              DisplayMemberPath="DisplayAs"/>
+
+                </StackPanel>
+                <StackPanel Width="160" Margin="5 0">
+                    <Label Margin="0 5 0 0" Height="18" Padding="0">Reserved Cars</Label>
+                    <ListBox Name="reservedCarsBox" Height="67"
+                             DisplayMemberPath="displayAs"></ListBox>
+                </StackPanel>
+            </WrapPanel>
+
+        </Grid>
+        <!--<Grid x:Name="loadingContainer">
+            <Rectangle Fill="Black" Opacity="0.6"/>
+            <Rectangle Stroke="Black" Cursor="Wait" Height="100" Width="300" Fill="White"/>
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" >Retrieving data...</Label>
+        </Grid>-->
     </Grid>
 </Window>
