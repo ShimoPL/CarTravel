@@ -19,14 +19,19 @@
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center">Availble Cars</Label>
         <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center">Selected Cars</Label>
-        <ListBox Name="CarsList" Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding oAvailbleCars}" DisplayMemberPath="displayAs">
+        <ListBox Name="CarsList" Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding oAvailbleCars, Mode=TwoWay}" DisplayMemberPath="displayAs" SelectionChanged="CarsList_SelectionChanged">
+            <!--<ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                </Style>
+            </ListBox.ItemContainerStyle>-->
         </ListBox>
-        <ListBox Name="SelectedCars" Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding oSelectedCars}" DisplayMemberPath="displayAs" />
+        <ListBox Name="SelectedCars" Grid.Row="1" Grid.Column="2" Margin="5" ItemsSource="{Binding oSelectedCars, Mode=TwoWay}" DisplayMemberPath="displayAs" />
 
 
         <StackPanel  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
-            <Button Content="&gt;&gt;" Margin="0 5" Click="Button_Click_2"/>
-            <Button Content="&lt;&lt;" Margin="0 5"/>
+            <Button Content="&gt;&gt;" Margin="0 5" Click="Button_Click_2" HorizontalAlignment="Right" Width="25"/>
+            <Button Content="&lt;&lt;" Margin="0 5" Click="Button_Click_3"/>
         </StackPanel>
 
         <Button Grid.Row="2" Width="60" HorizontalAlignment="Left" Margin="5" Click="Button_Click_1">Cancel</Button>

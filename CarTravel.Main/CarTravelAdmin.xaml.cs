@@ -6,6 +6,7 @@ using CarTravel.Main.Classes.GeneralModel;
 using CarTravel.Main.Classes.LoadingScreen;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -163,7 +164,8 @@ namespace CarTravel.Main
 
             if (carSelect.DialogResult == true)
             {
-
+                selectedReservation.carsList = carSelect.selectedCars.Select(c => c.carId).ToList();
+                reservedCarsBox.ItemsSource = _dataAccess.carsList.Where(c => selectedReservation.carsList.Contains(c.carId)).ToList();
             }
         }
     }

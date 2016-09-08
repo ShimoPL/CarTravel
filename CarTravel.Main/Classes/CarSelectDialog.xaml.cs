@@ -21,28 +21,38 @@ namespace CarTravel.Main.Classes
     /// </summary>
     public partial class CarSelectDialog : Window
     {
-        ObservableCollection<cars> oSelectedCars;
-        ObservableCollection<cars> oAvailbleCars;
+        public ObservableCollection<cars> oSelectedCars
+        {
+            get;
+            set;
+        }
         public List<cars> selectedCars
         {
-            set {oSelectedCars = new ObservableCollection<cars>(value); }
+            get { return oSelectedCars.ToList(); }
+            set { oSelectedCars = new ObservableCollection<cars>(value); }
         }
 
+
+        public ObservableCollection<cars> oAvailbleCars
+        {
+            get;
+            set;
+        }
 
         public List<cars> availbleCars
         {
-            get; set;
+            get { return oAvailbleCars.ToList(); }
+            set { oAvailbleCars = new ObservableCollection<cars>(value.Except(selectedCars)); }
         }
-
 
         public CarSelectDialog()
         {
             InitializeComponent();
+            DataContext = this;
             //if (selectedCars == null) selectedCars = new List<cars>();
             //if (selectedCars.Count > 0)
             //    availbleCars = availbleCars.Except(selectedCars).ToList();
             //oAvailbleCars = new ObservableCollection<cars>(availbleCars);
-            DataContext = this;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -57,8 +67,28 @@ namespace CarTravel.Main.Classes
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            //CarsList.ItemsSource = availbleCars.RemoveAll(x => x.carId == 1);
-            
+            var selectedCar = CarsList.SelectedItem as cars;
+            if (selectedCar != null)
+            {
+                if (oAvailbleCars.Contains(selectedCar)) oAvailbleCars.Remove(selectedCar);
+                if (!oSelectedCars.Contains(selectedCar)) oSelectedCars.Add(selectedCar);
+            }
+
+        }
+
+        private void CarsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            var selectedCar = SelectedCars.SelectedItem as cars;
+            if (selectedCar != null)
+            {
+                if (oSelectedCars.Contains(selectedCar)) oSelectedCars.Remove(selectedCar);
+                if (!oAvailbleCars.Contains(selectedCar)) oAvailbleCars.Add(selectedCar);
+            }
         }
     }
 }
