@@ -1,4 +1,5 @@
 ﻿using CarTravel.Main.Authorisation;
+using CarTravel.Main.Classes;
 using CarTravel.Main.Classes.DataAccess;
 using CarTravel.Main.Classes.DataAccess.Model;
 using CarTravel.Main.Classes.GeneralModel;
@@ -32,6 +33,7 @@ namespace CarTravel.Main
         private DataAccess _dataAccess;
         private FilterSettingsModel filters;
         GridViewColumnHeader _lastHeaderClicked = null;
+        ReservationModel selectedReservation = new ReservationModel();
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
         public MainWindow()
         {
@@ -137,17 +139,32 @@ namespace CarTravel.Main
 
         private void reservationsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ReservationModel selectedRow = reservationsList.SelectedItem as ReservationModel;
-            if (selectedRow != null)
+            selectedReservation = reservationsList.SelectedItem as ReservationModel;
+            if (selectedReservation != null)
             {
-                EditPanel.DataContext = _dataAccess.getReservation(selectedRow.reservationId);
-                reservedCarsBox.ItemsSource = _dataAccess.carsList.Where(c => selectedRow.carsList.Contains(c.carId));
+                EditPanel.DataContext = _dataAccess.getReservation(selectedReservation.reservationId);
+                reservedCarsBox.ItemsSource = _dataAccess.carsList.Where(c => selectedReservation.carsList.Contains(c.carId)).ToList();
             }
         }
 
         public string getCarName(int carId)
         {
             return _dataAccess.carsList.Where(c => c.carId == carId).Select(c => c.displayAs).FirstOrDefault();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var carSelect = new CarSelectDialog
+            {
+                selectedCars = _dataAccess.carsList.Where(c => selectedReservation.carsList.Contains(c.carId)).ToList(),
+                availbleCars = _dataAccess.carsList
+            };
+            carSelect.ShowDialog();
+
+            if (carSelect.DialogResult == true)
+            {
+
+            }
         }
     }
 }

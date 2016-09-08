@@ -118,6 +118,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\CarSelectDialog.xaml.cs">
+      <DependentUpon>CarSelectDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\Utils\BoolToVisibleConverter.cs" />
     <Compile Include="cars.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
@@ -175,6 +178,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Classes\Authorisation\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Classes\CarSelectDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

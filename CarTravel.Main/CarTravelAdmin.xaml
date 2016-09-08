@@ -35,15 +35,14 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="120"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="120" />
             </Grid.ColumnDefinitions>
 
-            <WrapPanel x:Name="filterSettings" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <WrapPanel x:Name="filterSettings" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <StackPanel Margin="10,0,10,0">
                     <Label Content="Start Date" Padding="3,0,2,0"></Label>
                     <DatePicker x:Name="dateFrom" SelectedDate="{Binding DateFrom}" DisplayDateEnd="{Binding DateTo}" 
@@ -69,7 +68,7 @@
                     </DatePicker>
                 </StackPanel>
             </WrapPanel>
-            <ListView Name="reservationsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" GridViewColumnHeader.Click="reservationsList_Click" SelectionChanged="reservationsList_SelectionChanged" >
+            <ListView Name="reservationsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" GridViewColumnHeader.Click="reservationsList_Click" SelectionChanged="reservationsList_SelectionChanged" >
                 <ListView.View>
                     <GridView AllowsColumnReorder="True">
                         <GridView.Columns>
@@ -92,15 +91,27 @@
             <Label x:Name="contentLabel" Content="No data to show. Check filters settings" 
                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
                HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+            <Grid Name="EditPanel" Grid.Row="2" MinHeight="120">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-            <WrapPanel Name="EditPanel" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="5">
-                <StackPanel Width="160" Margin="5 0">
+                <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="0">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">Start Date</Label>
                     <DatePicker Name="fromDate" SelectedDate="{Binding startDate, StringFormat=d}" Height="22" Padding="3 1"></DatePicker>
+                </StackPanel>
+                <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="1">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">End date</Label>
                     <DatePicker Name="toDate" SelectedDate="{Binding endDate, StringFormat=d}" Height="22" Padding="3 1"></DatePicker>
                 </StackPanel>
-                <StackPanel Width="160" Margin="5 0">
+                <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="2">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">Client</Label>
                     <ComboBox Name="clientListBox"
                               SelectedValue="{Binding client, Mode=TwoWay}" 
@@ -118,6 +129,8 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="3">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">Reservation Status</Label>
                     <ComboBox Name="statusListBox"
                               SelectedValue="{Binding statusCode, Mode=TwoWay}" 
@@ -125,13 +138,21 @@
                               DisplayMemberPath="DisplayAs"/>
 
                 </StackPanel>
-                <StackPanel Width="160" Margin="5 0">
-                    <Label Margin="0 5 0 0" Height="18" Padding="0">Reserved Cars</Label>
-                    <ListBox Name="reservedCarsBox" Height="67"
+                <DockPanel Margin="5 0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <StackPanel DockPanel.Dock="top">
+                        <Label Margin="0 5 0 0" Height="18" Padding="0">Reserved Cars</Label>
+                        <ListBox Name="reservedCarsBox" Height="67"
                              DisplayMemberPath="displayAs"></ListBox>
-                </StackPanel>
-            </WrapPanel>
+                    </StackPanel>
+                    <WrapPanel DockPanel.Dock="Bottom">
+                        <Button Margin="5" Click="Button_Click">Add car</Button>
+                        <Button Margin="5">Remove Car</Button>
+                    </WrapPanel>
 
+                </DockPanel>
+
+
+            </Grid>
         </Grid>
         <!--<Grid x:Name="loadingContainer">
             <Rectangle Fill="Black" Opacity="0.6"/>
