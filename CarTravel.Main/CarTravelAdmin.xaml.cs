@@ -33,12 +33,14 @@ namespace CarTravel.Main
         private users _actualUser;
         private DataAccess _dataAccess;
         private FilterSettingsModel filters;
+        private bool isEditing = false;
         GridViewColumnHeader _lastHeaderClicked = null;
         ReservationModel selectedReservation = new ReservationModel();
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
             _actualUser = new UserLogOn().ActualUser;
             _dataAccess = new DataAccess();
             filters = new FilterSettingsModel();
@@ -145,6 +147,7 @@ namespace CarTravel.Main
             {
                 EditPanel.DataContext = _dataAccess.getReservation(selectedReservation.reservationId);
                 reservedCarsBox.ItemsSource = _dataAccess.carsList.Where(c => selectedReservation.carsList.Contains(c.carId)).ToList();
+                EditPanel.IsEnabled = true;
             }
         }
 
@@ -168,5 +171,66 @@ namespace CarTravel.Main
                 reservedCarsBox.ItemsSource = _dataAccess.carsList.Where(c => selectedReservation.carsList.Contains(c.carId)).ToList();
             }
         }
+
+        private void CancelEdit()
+        {
+            selectedReservation = new ReservationModel();
+            EditPanel.DataContext = selectedReservation;
+            isEditing = false;
+            EditPanel.IsEnabled = false;
+            UpdateBtn.Visibility = Visibility.Visible;
+            AddBtn.Visibility = Visibility.Visible;
+            DeleteBtn.Visibility = Visibility.Visible;
+            SaveBtn.Visibility = Visibility.Collapsed;
+            reservationsList.SelectedItem = null;
+            reservedCarsBox.ItemsSource = null;
+        }
+
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+            selectedReservation = new ReservationModel();
+            EditPanel.DataContext = selectedReservation;
+            isEditing = true;
+            EditPanel.IsEnabled = true;
+            UpdateBtn.Visibility = Visibility.Collapsed;
+            AddBtn.Visibility = Visibility.Collapsed;
+            DeleteBtn.Visibility = Visibility.Collapsed;
+            SaveBtn.Visibility = Visibility.Visible;
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CancelEdit();
+        }
+
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (isEditing)
+            {
+                _dataAccess.updateReservation(selectedReservation);
+            }
+        }
+
+        private void UpdateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            selectedReservation.modifiedBy = _actualUser.userId;
+            selectedReservation.modifiedOn = DateTime.Now;
+            selectedReservation.client = clientListBox.SelectedValue;
+            _dataAccess.updateReservation(selectedReservation);
+        }
+
+
+        //public sealed class NullToBoolConverter : IValueConverter
+        //{
+        //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        //    {
+        //        return value == null ? False : True;
+        //    }
+
+        //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
     }
 }

@@ -10,7 +10,12 @@ namespace CarTravel.Main.Classes.DataAccess.Model
     {
         public ReservationModel()
         {
+
             carsList = new List<int>();
+            startDate = DateTime.Today;
+            endDate = DateTime.Today.AddDays(7);
+            createDate = DateTime.Now;
+
         }
 
         public IList<int> carsList { get; set; }

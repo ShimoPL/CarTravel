@@ -49,10 +49,6 @@ namespace CarTravel.Main.Classes
         {
             InitializeComponent();
             DataContext = this;
-            //if (selectedCars == null) selectedCars = new List<cars>();
-            //if (selectedCars.Count > 0)
-            //    availbleCars = availbleCars.Except(selectedCars).ToList();
-            //oAvailbleCars = new ObservableCollection<cars>(availbleCars);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

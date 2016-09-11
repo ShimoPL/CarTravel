@@ -91,7 +91,7 @@
             <Label x:Name="contentLabel" Content="No data to show. Check filters settings" 
                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
                HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
-            <Grid Name="EditPanel" Grid.Row="2" MinHeight="120">
+            <Grid Name="EditPanel" Grid.Row="2" MinHeight="120" Grid.ColumnSpan="2" Margin="1,0,119,0" IsEnabled="False">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -105,17 +105,19 @@
 
                 <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="0">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">Start Date</Label>
-                    <DatePicker Name="fromDate" SelectedDate="{Binding startDate, StringFormat=d}" Height="22" Padding="3 1"></DatePicker>
+                    <DatePicker Name="fromDate" SelectedDate="{Binding startDate, StringFormat=d, Mode=TwoWay}" Height="22" Padding="3 1"></DatePicker>
                 </StackPanel>
                 <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="1">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">End date</Label>
-                    <DatePicker Name="toDate" SelectedDate="{Binding endDate, StringFormat=d}" Height="22" Padding="3 1"></DatePicker>
+                    <DatePicker Name="toDate" SelectedDate="{Binding endDate, StringFormat=d, Mode=TwoWay}" Height="22" Padding="3 1"></DatePicker>
                 </StackPanel>
                 <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="2">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">Client</Label>
                     <ComboBox Name="clientListBox"
-                              SelectedValue="{Binding client, Mode=TwoWay}" 
+                              SelectedValue="{Binding client}"
+                              SelectedItem="{Binding client, Mode=TwoWay}" 
                               SelectedValuePath="userId">
+                                                       
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock>
@@ -151,8 +153,21 @@
 
                 </DockPanel>
 
-
+                <DockPanel Margin="5 0" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
+                    <StackPanel DockPanel.Dock="top">
+                        <Label Margin="0 5 0 0" Height="18" Padding="0">Comment</Label>
+                        <TextBox Name="CommentBox" Height="67" Text="{Binding comment, Mode=TwoWay}">
+                        </TextBox>
+                    </StackPanel>
+                </DockPanel>
             </Grid>
+            <StackPanel Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center">
+                <Button Name="UpdateBtn" Margin="0, 5" Click="UpdateBtn_Click">Update</Button>
+                <Button Name="AddBtn"  Margin="0, 5" Click="AddBtn_Click">Add new</Button>
+                <Button Name="SaveBtn"  Margin="0, 5" Visibility="Collapsed">Save</Button>
+                <Button Name="CancelBtn"  Margin="0, 5" Click="CancelBtn_Click">Cancel</Button>
+                <Button Name="DeleteBtn"  Margin="0, 5">Delete</Button>
+            </StackPanel>
         </Grid>
         <!--<Grid x:Name="loadingContainer">
             <Rectangle Fill="Black" Opacity="0.6"/>

@@ -73,7 +73,8 @@ namespace CarTravel.Main.Classes.DataAccess
                               createDate = rgroupped.Key.createDate,
                               statusCode = rgroupped.Key.status,
                               clientName = db.users.Where(u => u.userId == rgroupped.Key.client).Select(u => u.firstName + " " + u.lastName).FirstOrDefault(),
-                              carsList = rgroupped.Select(p => p.rc.carId)
+                              carsList = rgroupped.Select(p => p.rc.carId),
+                              comment = rgroupped.Key.comment
                           };
 
                 var reservation = tmp.ToList().Select(o => new ReservationModel
@@ -85,7 +86,8 @@ namespace CarTravel.Main.Classes.DataAccess
                     statusCode = o.statusCode,
                     status = statusList.Where(s => s.Code == o.statusCode).Select(s => s.DisplayAs).FirstOrDefault(),
                     clientName = o.clientName,
-                    carsList = o.carsList.ToList()
+                    carsList = o.carsList.ToList(),
+                    comment = o.comment
                 }).ToList();
 
                 return reservation;
@@ -115,6 +117,26 @@ namespace CarTravel.Main.Classes.DataAccess
                                   };
                 return reservation.FirstOrDefault();
             }
+        }
+
+        public bool updateReservation(ReservationModel reservation)
+        {
+            using (var db = new CarTravelDb())
+            {
+                var record = db.reservations.Find(reservation.reservationId);
+                if (record != null)
+                {
+                    record.modifiedBy = reservation.modifiedBy;
+                    record.modifiedOn = reservation.modifiedOn;
+                    record.startDate = reservation.startDate;
+                    record.endDate = reservation.endDate;
+                    record.status = reservation.statusCode;
+                    record.client = reservation.client;
+                    db.SaveChanges();
+                }
+                else return false;
+            }
+            return true;
         }
     }
 }
