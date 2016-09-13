@@ -1,0 +1,57 @@
+﻿<Window x:Class="CarTravel.Main.Classes.ClientEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarTravel.Main.Classes"
+        mc:Ignorable="d"
+        Title="Client Edit" Height="350.58" Width="749.372">
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="36"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label VerticalAlignment="Bottom">Client list</Label>
+        <ListBox Name="ClientListBox" Grid.Column="0" Grid.Row="1" Grid.RowSpan="6" Margin="5, 5, 25, 5" SelectionChanged="ClientListBox_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} {1}">
+                                <Binding Path="firstName" />
+                                <Binding Path="lastName" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Label VerticalAlignment="Bottom" Grid.Column="1">First name</Label>
+        <TextBox Name="UserNameBox"  Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding firstName, Mode=TwoWay}" IsEnabled="False"></TextBox>
+        <Label VerticalAlignment="Bottom" Grid.Column="2">Last name</Label>
+        <TextBox Name="UserLastNameBox"  Grid.Column="2" Grid.Row="1" Margin="5" Text="{Binding lastName, Mode=TwoWay}" IsEnabled="False"></TextBox>
+        <Label VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="2">Email</Label>
+        <TextBox Name="UserEmailBox"  Grid.Column="1" Grid.Row="3" Margin="5" Grid.ColumnSpan="2" Text="{Binding email, Mode=TwoWay}" IsEnabled="False"></TextBox>
+        <Label VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="4">Adress</Label>
+        <TextBox Name="UserAdressBox" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="5" Text="{Binding adress, Mode=TwoWay}" IsEnabled="False" SpellCheck.IsEnabled="True" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
+
+        <Button Grid.Row="8" Grid.Column="0" Width="90" Margin="5" HorizontalAlignment="Left" Click="Button_Click_1">Add new...</Button>
+        <Button Grid.Row="8" Grid.Column="0" Width="90" Margin="5, 5, 25, 5" HorizontalAlignment="Right" Click="Button_Click">Remove</Button>
+        <Button Name="SaveBtn"  Grid.Row="8" Grid.Column="2" Width="90" Margin="5" HorizontalAlignment="Right" IsEnabled="False" Click="SaveBtn_Click"> Save</Button>
+        <Button Name="UpdateBtn"  Grid.Row="8" Grid.Column="2" Width="90" Margin="5" HorizontalAlignment="Right" Visibility="Collapsed" Click="UpdateBtn_Click" >Update</Button>
+
+
+    </Grid>
+</Window>

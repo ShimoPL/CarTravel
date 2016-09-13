@@ -132,11 +132,123 @@ namespace CarTravel.Main.Classes.DataAccess
                     record.endDate = reservation.endDate;
                     record.status = reservation.statusCode;
                     record.client = reservation.client;
+                    record.comment = reservation.comment;
+
+                    var carsReservations = reservation.carsList.Select(c => new reservations_cars
+                    {
+                        carId = c,
+                        reservationId = reservation.reservationId
+                    }).ToList();
+                    db.reservations_cars.RemoveRange(db.reservations_cars.Where(c => c.reservationId == reservation.reservationId));
+                    db.reservations_cars.AddRange(carsReservations);
+                    db.SaveChanges();
+
+                }
+                else return false;
+            }
+            return true;
+        }
+
+        public bool addReservation(ReservationModel reservation)
+        {
+            using (var db = new CarTravelDb())
+            {
+                reservations res = new reservations
+                {
+                    client = reservation.client,
+                    createDate = DateTime.Now,
+                    startDate = reservation.startDate,
+                    endDate = reservation.endDate,
+                    modifiedBy = reservation.modifiedBy,
+                    status = reservation.statusCode,
+                    comment = reservation.comment
+                };
+                db.reservations.Add(res);
+                db.SaveChanges();
+
+                var carsReservations = reservation.carsList.Select(c => new reservations_cars
+                {
+                    carId = c,
+                    reservationId = res.reservationId
+                }).ToList();
+                db.reservations_cars.AddRange(carsReservations);
+                db.SaveChanges();
+            }
+            return true;
+        }
+
+        public bool removeReservation(long id)
+        {
+            using (var db = new CarTravelDb())
+            {
+                var record = db.reservations.Find(id);
+                if (record != null)
+                {
+                    db.reservations_cars.RemoveRange(db.reservations_cars.Where(c => c.reservationId == id));
+                    db.payments.RemoveRange(db.payments.Where(p => p.reservationId == id));
+                    db.reservations.Remove(record);
                     db.SaveChanges();
                 }
                 else return false;
             }
             return true;
+        }
+
+        public bool updateUser(users user)
+        {
+            using (var db = new CarTravelDb())
+            {
+                var record = db.users.Find(user.userId);
+                if (record != null)
+                {
+                    record.firstName = user.firstName;
+                    record.lastName = user.lastName;
+                    record.email = user.email;
+                    record.adress = user.adress;
+                    db.SaveChanges();
+
+                }
+                else return false;
+            }
+            return true;
+        }
+
+        public bool addUser(users user)
+        {
+            if (user != null)
+            {
+                using (var db = new CarTravelDb())
+                {
+                    user.createdOn = DateTime.Now.ToString();
+                    db.users.Add(user);
+                    db.SaveChanges();
+                }
+                return true;
+            }
+            else return false;
+        }
+
+        public bool removeUser(int userId)
+        {
+            using (var db = new CarTravelDb())
+            {
+                foreach (var res in db.reservations.Where(r => r.client == userId))
+                {
+                    removeReservation(res.reservationId);
+                }
+            }
+
+            using (var db = new CarTravelDb())
+            {
+                var record = db.users.Find(userId);
+                if (record != null)
+                {
+                    db.users.Remove(record);
+                    db.SaveChanges();
+                }
+                else return false;
+            }
+                return true;
         }
     }
 }

@@ -148,6 +148,8 @@ namespace CarTravel.Main
                 EditPanel.DataContext = _dataAccess.getReservation(selectedReservation.reservationId);
                 reservedCarsBox.ItemsSource = _dataAccess.carsList.Where(c => selectedReservation.carsList.Contains(c.carId)).ToList();
                 EditPanel.IsEnabled = true;
+                UpdateBtn.IsEnabled = true;
+                DeleteBtn.IsEnabled = true;
             }
         }
 
@@ -179,8 +181,10 @@ namespace CarTravel.Main
             isEditing = false;
             EditPanel.IsEnabled = false;
             UpdateBtn.Visibility = Visibility.Visible;
+            UpdateBtn.IsEnabled = false;
             AddBtn.Visibility = Visibility.Visible;
             DeleteBtn.Visibility = Visibility.Visible;
+            DeleteBtn.IsEnabled = false;
             SaveBtn.Visibility = Visibility.Collapsed;
             reservationsList.SelectedItem = null;
             reservedCarsBox.ItemsSource = null;
@@ -213,24 +217,80 @@ namespace CarTravel.Main
 
         private void UpdateBtn_Click(object sender, RoutedEventArgs e)
         {
-            selectedReservation.modifiedBy = _actualUser.userId;
-            selectedReservation.modifiedOn = DateTime.Now;
-            selectedReservation.client = clientListBox.SelectedValue;
-            _dataAccess.updateReservation(selectedReservation);
+            if (selectedReservation != null)
+            {
+
+                if (clientListBox.SelectedItem as users != null
+                    && statusListBox.SelectedValue != null
+                    && fromDate.SelectedDate.Value != null
+                    && toDate.SelectedDate.Value != null
+                    )
+                {
+                    if (selectedReservation.carsList.Count > 0)
+                    {
+                        selectedReservation.modifiedBy = _actualUser.userId;
+                        selectedReservation.modifiedOn = DateTime.Now;
+                        selectedReservation.client = (clientListBox.SelectedItem as users).userId;
+                        selectedReservation.statusCode = statusListBox.SelectedValue.ToString();
+                        selectedReservation.startDate = fromDate.SelectedDate.Value;
+                        selectedReservation.endDate = toDate.SelectedDate.Value;
+                        selectedReservation.comment = CommentBox.Text;
+                        if (_dataAccess.updateReservation(selectedReservation)) UpdateReservationsList();
+                        CancelEdit();
+                    }
+                    else MessageBox.Show("Please select car for reservation", "Car not selected", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else MessageBox.Show("Please fill all required fields!", "Reservation uncoplete", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
+        private void DeleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedReservation != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this reservation?", "Confirm delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _dataAccess.removeReservation(selectedReservation.reservationId);
+                    UpdateReservationsList();
+                    CancelEdit();
+                }
+            }
 
-        //public sealed class NullToBoolConverter : IValueConverter
-        //{
-        //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        //    {
-        //        return value == null ? False : True;
-        //    }
+        }
 
-        //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
+        private void SaveBtn_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (clientListBox.SelectedItem as users != null
+                && statusListBox.SelectedValue != null
+                && fromDate.SelectedDate.Value != null
+                && toDate.SelectedDate.Value != null
+                )
+            {
+                if (selectedReservation.carsList.Count > 0)
+                {
+                    selectedReservation.modifiedBy = _actualUser.userId;
+                    selectedReservation.modifiedOn = DateTime.Now;
+                    selectedReservation.client = (clientListBox.SelectedItem as users).userId;
+                    selectedReservation.statusCode = statusListBox.SelectedValue.ToString();
+                    selectedReservation.startDate = fromDate.SelectedDate.Value;
+                    selectedReservation.endDate = toDate.SelectedDate.Value;
+                    selectedReservation.comment = CommentBox.Text;
+                    if (_dataAccess.addReservation(selectedReservation)) UpdateReservationsList();
+                    CancelEdit();
+                }
+                else MessageBox.Show("Please select car for reservation", "Car not selected", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else MessageBox.Show("Please fill all required fields!", "Reservation uncoplete", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var clientDialog = new ClientEditDialog();
+            clientDialog.ShowDialog();
+
+            UpdateReservationsList();
+            clientListBox.ItemsSource = _dataAccess.getClientList();
+        }
     }
 }

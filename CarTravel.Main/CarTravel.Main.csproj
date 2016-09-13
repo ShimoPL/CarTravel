@@ -121,6 +121,9 @@
     <Compile Include="Classes\CarSelectDialog.xaml.cs">
       <DependentUpon>CarSelectDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\ClientEditDialog.xaml.cs">
+      <DependentUpon>ClientEditDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\Utils\BoolToVisibleConverter.cs" />
     <Compile Include="cars.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
@@ -182,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Classes\CarSelectDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Classes\ClientEditDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

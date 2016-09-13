@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:CarTravel.Main"
         xmlns:utils="clr-namespace:CarTravel.Main.Utils"
         mc:Ignorable="d"
-        Title="Car Travel Admin" Height="350" Width="725">
+        Title="Car Travel Admin" Height="350" Width="989">
 
     <Window.Resources>
         <utils:BoolToVisibleConverter x:Key="boolToVis" />
@@ -67,6 +67,8 @@
                         </DatePicker.Resources>
                     </DatePicker>
                 </StackPanel>
+                <Button Margin="5" MinWidth="120" Click="Button_Click_1">Client edit</Button>
+                <Button Margin="5" MinWidth="120">Cars edit</Button>
             </WrapPanel>
             <ListView Name="reservationsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" GridViewColumnHeader.Click="reservationsList_Click" SelectionChanged="reservationsList_SelectionChanged" >
                 <ListView.View>
@@ -135,7 +137,8 @@
                 <StackPanel Margin="5 0" Grid.Row="0" Grid.Column="3">
                     <Label Margin="0 5 0 0" Height="18" Padding="0">Reservation Status</Label>
                     <ComboBox Name="statusListBox"
-                              SelectedValue="{Binding statusCode, Mode=TwoWay}" 
+                              SelectedValue="{Binding statusCode}" 
+                              SelectedItem="{Binding statusCode, Mode=TwoWay}"
                               SelectedValuePath="Code"
                               DisplayMemberPath="DisplayAs"/>
 
@@ -147,8 +150,7 @@
                              DisplayMemberPath="displayAs"></ListBox>
                     </StackPanel>
                     <WrapPanel DockPanel.Dock="Bottom">
-                        <Button Margin="5" Click="Button_Click">Add car</Button>
-                        <Button Margin="5">Remove Car</Button>
+                        <Button Margin="5" Click="Button_Click">Edit cars</Button>
                     </WrapPanel>
 
                 </DockPanel>
@@ -156,17 +158,17 @@
                 <DockPanel Margin="5 0" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
                     <StackPanel DockPanel.Dock="top">
                         <Label Margin="0 5 0 0" Height="18" Padding="0">Comment</Label>
-                        <TextBox Name="CommentBox" Height="67" Text="{Binding comment, Mode=TwoWay}">
+                        <TextBox Name="CommentBox" Height="67" Text="{Binding comment, Mode=TwoWay}" TextWrapping="Wrap" AcceptsReturn="True">
                         </TextBox>
                     </StackPanel>
                 </DockPanel>
             </Grid>
             <StackPanel Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center">
-                <Button Name="UpdateBtn" Margin="0, 5" Click="UpdateBtn_Click">Update</Button>
+                <Button Name="UpdateBtn" Margin="0, 5" Click="UpdateBtn_Click" IsEnabled="False">Update</Button>
                 <Button Name="AddBtn"  Margin="0, 5" Click="AddBtn_Click">Add new</Button>
-                <Button Name="SaveBtn"  Margin="0, 5" Visibility="Collapsed">Save</Button>
+                <Button Name="SaveBtn"  Margin="0, 5" Visibility="Collapsed" Click="SaveBtn_Click_1">Save</Button>
                 <Button Name="CancelBtn"  Margin="0, 5" Click="CancelBtn_Click">Cancel</Button>
-                <Button Name="DeleteBtn"  Margin="0, 5">Delete</Button>
+                <Button Name="DeleteBtn"  Margin="0, 5" IsEnabled="False" Click="DeleteBtn_Click">Delete</Button>
             </StackPanel>
         </Grid>
         <!--<Grid x:Name="loadingContainer">
